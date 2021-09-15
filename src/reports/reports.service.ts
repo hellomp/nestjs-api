@@ -7,27 +7,28 @@ import { Report } from './entities/report.entity';
 
 @Injectable()
 export class ReportsService {
-  constructor(@InjectModel(Report) private reportModel: typeof Report, private tenantService: TenantService) {}
+  constructor(
+    @InjectModel(Report) private reportModel: typeof Report,
+    private tenantService: TenantService,
+  ) {}
 
   create(createReportDto: CreateReportDto) {
-    return this.reportModel.create(
-      {
-        ...createReportDto,
-        account_id: this.tenantService.tenant.id
-      }
-    )
+    return this.reportModel.create({
+      ...createReportDto,
+      account_id: this.tenantService.tenant.id,
+    });
   }
 
   findAll() {
     return this.reportModel.findAll({
-      where:{
-        account_id: this.tenantService.tenant.id
-      }
+      where: {
+        account_id: this.tenantService.tenant.id,
+      },
     });
   }
 
   async update(id: string, updateReportDto: UpdateReportDto) {
-    const report = await this.reportModel.findByPk(id: { rejectOnEmpty: true})
+    const report = await this.reportModel.findByPk(id, { rejectOnEmpty: true });
     return report.update(updateReportDto);
   }
 }
